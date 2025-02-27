@@ -6,7 +6,7 @@ const NavBar = () => {
             <ul className="flex justify-between items-center px-14">
                 <Link href="/"><li>Home</li></Link>
                 <Link href="/services"><li>Services</li></Link>
-                <Link href="/about"><li>About</li></Link>
+                <Link href="/products"><li>Products</li></Link>
                 <li>Contact</li>
             </ul>
         </nav>
