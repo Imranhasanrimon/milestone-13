@@ -1,6 +1,7 @@
 
-const ProductDetailsPage = ({ params }) => {
-    const id = params.id;
+const ProductDetailsPage = async ({ params }) => {
+    const paramss = await params;
+    const id = paramss.id;
     const products = [
         {
             _id: "678fa18676faaff40a",
