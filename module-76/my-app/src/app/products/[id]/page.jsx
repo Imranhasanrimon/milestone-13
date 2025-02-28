@@ -34,13 +34,22 @@ const ProductDetailsPage = ({ params }) => {
         }
     ];
     const details = products.find(p => p._id == id);
-    return (
-        <div>
-            <p className='text-2xl font-semibold mb-5'>Products Details Page</p>
-            <p className="text-gray-400 text-center">Name: {details.product_name}</p>
-            <img className="w-60 rounded-xl m-3" src={details.product_image} alt="" />
-        </div>
-    );
+    if (details) {
+        return (
+            <div>
+                <p className='text-2xl font-semibold mb-5'>Products Details Page</p>
+                <p className="text-gray-400 text-center">Name: {details.product_name}</p>
+                <img className="w-60 rounded-xl m-3" src={details.product_image} alt="" />
+            </div>
+        );
+    } else {
+        return (
+            <div>
+                <p className='text-2xl text-red-500 font-semibold mb-5'>No Product Found</p>
+                <p className="text-gray-400 text-center">route Id does not match</p>
+            </div>
+        )
+    }
 };
 
 export default ProductDetailsPage;
