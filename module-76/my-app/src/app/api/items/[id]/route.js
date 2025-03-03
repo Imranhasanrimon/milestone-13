@@ -9,11 +9,13 @@ export async function GET(req, { params }) {
     return Response.json(result)
 }
 
-export async function DELETE(req, params) {
+export async function DELETE(req, { params }) {
 
     const id = await params;
+    const filter = { _id: new ObjectId(id) };
+    const result = await dbConnect('users').deleteOne(filter)
 
-    return Response.json({ ...id, method: 'DELETE' })
+    return Response.json(result)
 }
 
 export async function PATCH(req, { params }) {
