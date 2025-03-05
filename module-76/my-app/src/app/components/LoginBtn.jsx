@@ -3,7 +3,7 @@ import { signIn } from "next-auth/react"
 const LoginBtn = () => {
     return (
         <div>
-            <button onClick={() => signIn()} className="border rounded-full p-3 cursor-pointer">Login</button>
+            <button onClick={() => signIn()} className="border rounded-full px-3 py-1 cursor-pointer m-2">Login</button>
         </div>
     );
 };
