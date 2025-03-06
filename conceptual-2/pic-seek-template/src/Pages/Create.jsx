@@ -3,6 +3,7 @@ import PageTitle from "../components/shared/PageTitle";
 import { AuthContext } from "../provider/AuthProvider";
 import Swal from "sweetalert2";
 import { useState } from "react";
+import axios from "axios";
 
 const Create = () => {
   const { user, login } = useContext(AuthContext);
@@ -70,36 +71,9 @@ const Create = () => {
     return true;
   }
 
-  const getImageBuffer = async (prompt, category) => {
-    const finalPrompt = `imagine a ${category} : ${prompt}`;
-    console.log(finalPrompt);
 
-    const myForm = new FormData();
-    myForm.append('prompt', finalPrompt)
 
-    const response = await fetch('https://clipdrop-api.co/text-to-image/v1', {
-      method: 'POST',
-      headers: {
-        'x-api-key': import.meta.env.VITE_CD_KEY,
-      },
-      body: myForm,
-    })
-    const buffer = await response.arrayBuffer()
-    return buffer;
-  }
 
-  const generateImageUrl = async (buffer) => {
-    const formData = new FormData();
-    formData.append('image', new Blob([buffer], { type: "image/jpeg" }))
-
-    const response = await fetch(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_BB_API_KEY}`, {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await response.json();
-    return data?.data?.url;
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,13 +84,20 @@ const Create = () => {
     if (!checkUser()) return;
     if (!validate(prompt, category)) return;
 
-    const buffer = await getImageBuffer(prompt, category);
+    const res = await axios.post('http://localhost:5000/create-image', {
+      email: user?.email,
+      prompt,
+      userName: user?.displayName,
+      userImg: user?.photoURL || "https://img.icons8.com/?size=48&id=hAWG9NB2Dzjv&format=png",
+      category
+    })
+    setImageUrl(res?.data?.url);
 
     // const imageBlob = new Blob([buffer], { type: "image/jpeg" });
     // const url = URL.createObjectURL(imageBlob);
     // console.log(url);
 
-    setImageUrl(await generateImageUrl(buffer));
+
 
   };
   return (
