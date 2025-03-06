@@ -2,9 +2,11 @@ import { useContext } from "react";
 import PageTitle from "../components/shared/PageTitle";
 import { AuthContext } from "../provider/AuthProvider";
 import Swal from "sweetalert2";
+import { useState } from "react";
 
 const Create = () => {
   const { user, login } = useContext(AuthContext);
+  const [imageUrl, setImageUrl] = useState('')
   const options = [
     "painting",
     "animated-image",
@@ -43,30 +45,19 @@ const Create = () => {
       return true;
     }
   };
-  const handleSubmit = (e) => {
-    e.preventDefault();
 
-    if (!checkUser()) return;
-
-    const form = e.target;
-    const prompt = form.prompt.value;
-    const category = form.category.value;
-    // validation starts
+  const validate = (prompt, category) => {
     if (!category) {
       Swal.fire(
         "Select Category",
         "Select a Category from the dropdown",
         "error"
       );
-      return;
+      return false;
     }
     if (!prompt) {
       Swal.fire("Write a Prompt", "Write a prompt in the input", "error");
-      return;
-    }
-    if (!prompt) {
-      Swal.fire("Write a Prompt", "Write a prompt in the input", "error");
-      return;
+      return false;
     }
     if (prompt.trim().length < 20) {
       Swal.fire(
@@ -74,14 +65,59 @@ const Create = () => {
         "make your prompt bigger (minimum 20 character)",
         "error"
       );
-      return;
+      return false;
     }
-    //validation End
+    return true;
+  }
 
-    console.log({ prompt, category });
+  const getImageBuffer = async (prompt, category) => {
     const finalPrompt = `imagine a ${category} : ${prompt}`;
     console.log(finalPrompt);
-    return;
+
+    const myForm = new FormData();
+    myForm.append('prompt', finalPrompt)
+
+    const response = await fetch('https://clipdrop-api.co/text-to-image/v1', {
+      method: 'POST',
+      headers: {
+        'x-api-key': import.meta.env.VITE_CD_KEY,
+      },
+      body: myForm,
+    })
+    const buffer = await response.arrayBuffer()
+    return buffer;
+  }
+
+  const generateImageUrl = async (buffer) => {
+    const formData = new FormData();
+    formData.append('image', new Blob([buffer], { type: "image/jpeg" }))
+
+    const response = await fetch(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_BB_API_KEY}`, {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+    return data?.data?.url;
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const prompt = form.prompt.value;
+    const category = form.category.value;
+
+    if (!checkUser()) return;
+    if (!validate(prompt, category)) return;
+
+    const buffer = await getImageBuffer(prompt, category);
+
+    // const imageBlob = new Blob([buffer], { type: "image/jpeg" });
+    // const url = URL.createObjectURL(imageBlob);
+    // console.log(url);
+
+    setImageUrl(await generateImageUrl(buffer));
+
   };
   return (
     <div>
@@ -124,6 +160,7 @@ const Create = () => {
           </div>
         </form>
       </div>
+      <img src={imageUrl} alt="" />
     </div>
   );
 };
