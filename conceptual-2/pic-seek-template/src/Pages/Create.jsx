@@ -84,7 +84,7 @@ const Create = () => {
     if (!checkUser()) return;
     if (!validate(prompt, category)) return;
 
-    const res = await axios.post('http://localhost:5000/create-image', {
+    const res = await axios.post('http://localhost:5000/api/v1/image/create', {
       email: user?.email,
       prompt,
       userName: user?.displayName,
