@@ -13,6 +13,7 @@ const client = new MongoClient(process.env.URI, {
 
 const db = client.db(process.env.DB_NAME);
 const imagesCollection = db.collection('images');
+const commentsCollection = db.collection('comments');
 
 async function connectDB() {
     return client.connect()
@@ -20,4 +21,4 @@ async function connectDB() {
 
 
 
-module.exports = { connectDB, imagesCollection };
+module.exports = { connectDB, imagesCollection, commentsCollection };

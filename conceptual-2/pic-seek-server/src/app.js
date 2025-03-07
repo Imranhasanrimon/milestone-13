@@ -5,6 +5,7 @@ const cors = require('cors');
 const logger = require('./middleware/logger');
 const verifyToken = require('./middleware/verifyToken');
 const imageRouter = require('./routes/image.route');
+const commentRouter = require('./routes/comment.route');
 const app = express();
 
 //middleware
@@ -15,7 +16,7 @@ app.use(verifyToken)
 
 //routers
 app.use('/api/v1/image', imageRouter)
-app.get('/api/v1/image', imageRouter)
+app.use('/api/v1/comment', commentRouter)
 
 //playground
 

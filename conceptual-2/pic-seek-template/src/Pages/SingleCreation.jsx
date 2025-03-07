@@ -14,7 +14,7 @@ const SingleCreation = () => {
     return (
         <div>
             <PageTitle>Details Page</PageTitle>
-            <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gray-500">
+            <div className="min-h-screen flex flex-col items-center justify-center p-6 ">
                 <div className="bg-white shadow-lg rounded-lg p-6 max-w-lg w-full">
                     <div className="flex items-center gap-4 mb-4">
                         <img
