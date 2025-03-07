@@ -15,7 +15,7 @@ const getAndSetReply = async (req, res) => {
 const getAllComments = async (req, res) => {
 
     const { AIImageId } = req.params;
-    const result = await commentsCollection.find({ AIImageId }).project({ userEmail: -1, AIImageId: -1, imagePrompt: -1, }).toArray();
+    const result = await commentsCollection.find({ AIImageId }).project({ userEmail: 0, AIImageId: 0, imagePrompt: 0, }).toArray();
 
     res.send(result)
 
