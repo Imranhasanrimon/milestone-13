@@ -1,16 +1,18 @@
 import { NavLink } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase/firebase.init";
+import { useContext } from "react";
+import { AuthContext } from "../providers/AuthProvider";
 
 const Navbar = () => {
+    const { signOutUser, user, googleSignIn } = useContext(AuthContext)
     const links = <>
         <li><NavLink to="/">Home</NavLink></li>
         <li><NavLink to="/login">Login</NavLink></li>
         <li><NavLink to="/register">Register</NavLink></li>
+        {user && <li><NavLink to="/productDetails">Details</NavLink></li>}
     </>
 
     const handleLogOut = () => {
-        signOut(auth)
+        signOutUser()
             .then(() => console.log('logout is done'))
     }
     return (
@@ -34,7 +36,7 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
-                <button onClick={handleLogOut} className="btn">Log Out</button>
+                {user ? <button onClick={handleLogOut} className="btn">Log Out</button> : <button onClick={googleSignIn} className="btn">G Login</button>}
             </div>
         </div>
     );

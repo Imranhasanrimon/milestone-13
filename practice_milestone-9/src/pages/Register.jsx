@@ -1,17 +1,16 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from './../firebase/firebase.init';
-import { GoogleAuthProvider, signInWithPopup, updateProfile } from "firebase/auth";
-import { useState } from "react";
+import { updateProfile } from "firebase/auth";
+import { useContext } from "react";
 import { Link } from 'react-router-dom';
+import { AuthContext } from "../providers/AuthProvider";
 const Register = () => {
-    const googleProvider = new GoogleAuthProvider();
-    const [user, setUser] = useState(null);
+    const { createUser, user, googleSignIn } = useContext(AuthContext);
+    console.log(user);
+
 
 
     const handleGoogleLogin = () => {
-        signInWithPopup(auth, googleProvider)
-            .then(result => setUser(result.user))
-            .catch(error => console.log(error))
+        googleSignIn()
     }
 
     const handleSubmit = e => {
@@ -22,9 +21,8 @@ const Register = () => {
         const email = form.email.value;
         const password = form.password.value;
 
-        createUserWithEmailAndPassword(auth, email, password)
-            .then(result => {
-                setUser(result.user)
+        createUser(email, password)
+            .then(() => {
 
                 updateProfile(auth.currentUser, {
                     displayName: name, photoURL: photo
@@ -37,7 +35,6 @@ const Register = () => {
     }
 
 
-    console.log(user);
     return (
         <div className="card bg-base-100 w-full max-w-sm shrink-0  mx-auto my-56">
             <img className="rounded-full w-32 h-32 mx-auto mb-2" src={user?.photoURL} alt="" />

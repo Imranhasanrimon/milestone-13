@@ -1,16 +1,15 @@
-import { useRef, useState } from "react";
-import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+import { useContext, useRef } from "react";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../firebase/firebase.init";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../providers/AuthProvider";
 
 const Login = () => {
-    const [user, setUser] = useState(null);
+    const { user, googleSignIn, signInUser } = useContext(AuthContext);
     const forgetEmail = useRef();
 
     const handleGoogleLogin = () => {
-        signInWithPopup(auth, GoogleAuthProvider)
-            .then(result => setUser(result.user))
-            .catch(error => console.log(error))
+        googleSignIn()
     }
 
     const handleSubmit = e => {
@@ -20,8 +19,8 @@ const Login = () => {
         const password = form.password.value;
         console.log(email, password);
 
-        signInWithEmailAndPassword(auth, email, password)
-            .then(result => setUser(result.user))
+        signInUser(email, password)
+            .then(result => console.log(result.user))
             .catch(err => console.log(err))
         // form.reset()
     }
