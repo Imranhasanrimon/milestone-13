@@ -1,2 +1,9 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+
+
+/* this is for NavLink style */
+a.active {
+    background: rgba(128, 128, 128, 0.253);
+}
