@@ -3,6 +3,7 @@ const express = require('express');
 const { verifyToken } = require('./middlewares/verifyToken');
 const userRouter = require('./routes/user.router');
 const { reviewRouter } = require('./routes/review.router');
+const { jwtRouter } = require('./routes/jwt.router');
 const app = express();
 
 
@@ -14,6 +15,7 @@ app.use(verifyToken)
 //routes
 app.use('/practice/users', userRouter);
 app.use('/practice/reviews', reviewRouter)
+app.use('/practice/jwt', jwtRouter)
 
 //playgrounds
 
